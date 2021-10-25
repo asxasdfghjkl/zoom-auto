@@ -1,0 +1,25 @@
+{
+	"name": "zoom-auto",
+	"version": "0.0.0",
+	"scripts": {
+		"dev": "vite",
+		"build": "vite build",
+		"serve": "vite preview"
+	},
+	"dependencies": {
+		"react": "^17.0.2",
+		"react-dom": "^17.0.2"
+	},
+	"devDependencies": {
+		"@vitejs/plugin-react": "^1.0.0",
+		"vite": "^2.6.4",
+		"vite-plugin-cdn-import": "^0.3.5"
+	},
+	"module": "./dist/zoom-auto.es.js",
+	"exports": {
+		".": {
+			"import": "./dist/zoom-auto.es.js",
+			"require": "./dist/zoom-auto.umd.js"
+		}
+	}
+}

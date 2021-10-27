@@ -1,3 +1,5 @@
+import React from 'react';
+
 /**
  * @typedef LogsProps
  * @type {object}
@@ -7,6 +9,7 @@
 /**
  * @typedef LogItem
  * @type {object}
+ * @property {string} type
  * @property {Date} time
  * @property {string} message
  */
@@ -16,13 +19,29 @@
  * @returns
  */
 export function Logs({ logs }) {
+	/**
+	 * @type {React.RefObject<HTMLDivElement>}
+	 */
+	const rootRef = React.useRef(null);
+
+	React.useEffect(() => {
+		if (rootRef.current) {
+			rootRef.current.scrollTop = rootRef.current.scrollHeight;
+		}
+	}, [logs]);
+
 	return (
-		<ul style={{ whiteSpace: 'pre-wrap' }}>
-			{logs.map(log => (
-				<li key={+log.time}>
-					<time>{log.time.toLocaleTimeString()}</time> <span>{log.message}</span>
-				</li>
-			))}
-		</ul>
+		<div ref={rootRef} style={{ whiteSpace: 'pre-wrap' }} className="h-100 overflow-auto card">
+			<div className="card-body">
+				{logs.map(log => (
+					<div key={+log.time} className={`alert alert-${log.type || 'light'}`}>
+						<strong>
+							<time>{log.time.toLocaleTimeString()}</time>
+						</strong>{' '}
+						<span>{log.message}</span>
+					</div>
+				))}
+			</div>
+		</div>
 	);
 }

@@ -375,3 +375,11 @@ function App() {
 ReactDOM.render(/* @__PURE__ */ jsx(React.StrictMode, {
   children: /* @__PURE__ */ jsx(App, {})
 }), PluginRoot);
+ZoomWindow.addEventListener("beforeunload", (evt) => {
+  evt.returnValue = "\u4F60\u78BA\u5B9A\u8981\u95DC\u9589Zoom\u6703\u8B70\u55CE\uFF1F";
+  evt.preventDefault();
+  return true;
+});
+ZoomWindow.addEventListener("unload", () => {
+  PluginWindow.close();
+});

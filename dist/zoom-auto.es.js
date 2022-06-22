@@ -24,7 +24,7 @@ function hover(element) {
   element.dispatchEvent(evt);
 }
 function getWaitroomItems() {
-  const items = ZoomDocument.querySelectorAll(".waiting-room-list-conatiner .participants-li");
+  const items = ZoomDocument.querySelectorAll(".waiting-room-list-container .participants-li");
   return [...items].map((item) => {
     return {
       name: item.querySelector(".participants-item__display-name").textContent,

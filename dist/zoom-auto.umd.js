@@ -8,7 +8,7 @@
 <div id="root"></div>
 </body>
 </html>
-`);const S=y.body,O=y.querySelector("#root"),w=window,v=w.document;function _(e){const t=new MouseEvent("mouseover",{bubbles:!0,cancelable:!1});e.dispatchEvent(t)}function R(){return[...v.querySelectorAll(".waiting-room-list-conatiner .participants-li")].map(t=>({name:t.querySelector(".participants-item__display-name").textContent,allow:A(t)}))}function A(e){return()=>{_(e),setTimeout(()=>{e.querySelector(".participants-item__right-section button.btn-primary").click()},10)}}function B(){return v.querySelector(".participants-section-container")?!0:(v.querySelector(".footer-button__participants-icon").parentElement.parentElement.click(),!!v.querySelector(".participants-section-container"))}var C={exports:{}},g={};/*
+`);const S=y.body,O=y.querySelector("#root"),w=window,v=w.document;function _(e){const t=new MouseEvent("mouseover",{bubbles:!0,cancelable:!1});e.dispatchEvent(t)}function R(){return[...v.querySelectorAll(".waiting-room-list-container .participants-li")].map(t=>({name:t.querySelector(".participants-item__display-name").textContent,allow:A(t)}))}function A(e){return()=>{_(e),setTimeout(()=>{e.querySelector(".participants-item__right-section button.btn-primary").click()},10)}}function B(){return v.querySelector(".participants-section-container")?!0:(v.querySelector(".footer-button__participants-icon").parentElement.parentElement.click(),!!v.querySelector(".participants-section-container"))}var C={exports:{}},g={};/*
 object-assign
 (c) Sindre Sorhus
 @license MIT

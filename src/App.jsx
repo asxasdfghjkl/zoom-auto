@@ -7,7 +7,7 @@ import { Logs } from './views/Logs';
 function App() {
 	const [logs, setLogs] = React.useState([]);
 	const addLog = React.useCallback((message, type) => setLogs(arr => [...arr, { time: new Date(), message, type }]), [setLogs]);
-
+	const hasPartisapantListRef = React.useRef(null);
 	/**
 	 * @type {React.MutableRefObject<string[]>}
 	 */
@@ -63,7 +63,14 @@ function App() {
 	React.useEffect(() => {
 		const timer = PluginWindow.setInterval(() => {
 			if (!detectingRef.current) return;
-			ZoomHelper.ensureWaitroomWindow();
+			const hasList = ZoomHelper.ensureWaitroomWindow();
+			if (hasList !== hasPartisapantListRef.current) {
+				if (!hasList) {
+					addLog('請開啟與會者視窗', 'danger');
+				}
+				hasPartisapantListRef.current = hasList;
+			}
+
 			const waitings = ZoomHelper.getWaitroomItems();
 			for (const waiting of waitings) {
 				const match = strictCompareRef.current
@@ -78,7 +85,7 @@ function App() {
 					unallowed.current.push(waiting.name);
 				}
 			}
-		}, 5000);
+		}, 1000);
 		PluginWindow.onbeforeunload = () => PluginWindow.clearInterval(timer);
 	}, []);
 
@@ -111,3 +118,4 @@ function App() {
 }
 
 export default App;
+

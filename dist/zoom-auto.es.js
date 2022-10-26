@@ -1,10 +1,11 @@
-import React$1 from "react";
-const PluginWindow = window.open("", "_blank", "width=800, height=780, toolbar=1");
+import React$1 from 'react';
+
+const PluginWindow = window.open('', '_blank', 'width=800, height=780, toolbar=1');
 const PluginDocument = PluginWindow.document;
 PluginDocument.write(`
 <html>
 <head>
-<title>Zoom\u81EA\u52D5\u7B49\u5019\u5BA4\u5916\u639B</title>
+<title>Zoom自動等候室外掛</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 </head>
 <body>
@@ -13,104 +14,162 @@ PluginDocument.write(`
 </html>
 `);
 const PluginBody = PluginDocument.body;
-const PluginRoot = PluginDocument.querySelector("#root");
+const PluginRoot = PluginDocument.querySelector('#root');
 const ZoomWindow = window;
 const ZoomDocument = ZoomWindow.document;
+
+/**
+ * send MouseOver event to elemnt
+ * @param {Element} element
+ */
 function hover(element) {
-  const evt = new MouseEvent("mouseover", {
+  const evt = new MouseEvent('mouseover', {
     bubbles: true,
     cancelable: false
   });
   element.dispatchEvent(evt);
 }
+
+/**
+ * @typedef WaitroomItem
+ * @type {object}
+ * @property {string} name
+ * @property {()=>void} allow
+ */
+
+/**
+ * @returns {WaitroomItem[]}
+ */
+
 function getWaitroomItems() {
-  const items = ZoomDocument.querySelectorAll(".waiting-room-list-container .participants-li");
-  return [...items].map((item) => {
+  const items = ZoomDocument.querySelectorAll('.waiting-room-list-container .participants-li');
+  return [...items].map(item => {
     return {
-      name: item.querySelector(".participants-item__display-name").textContent,
+      name: item.querySelector('.participants-item__display-name').textContent,
       allow: allowWaiting(item)
     };
   });
 }
+/**
+ *
+ * @param {HTMLLIElement} element
+ */
+
 function allowWaiting(element) {
   return () => {
     hover(element);
     setTimeout(() => {
-      const joinButton = element.querySelector(".participants-item__right-section button.btn-primary");
+      const joinButton = element.querySelector('.participants-item__right-section button.btn-primary');
       joinButton.click();
     }, 10);
   };
 }
+
 function ensureWaitroomWindow() {
-  let container = ZoomDocument.querySelector(".participants-section-container");
+  const containerClass = ".participants-section-container";
+  let container = ZoomDocument.querySelector(containerClass);
+
   if (container) {
     return true;
   }
-  const toggleBtn = ZoomDocument.querySelector(".footer-button__participants-icon").parentElement.parentElement;
-  toggleBtn.click();
-  return !!ZoomDocument.querySelector(".participants-section-container");
+
+  const toggleBtn = ZoomDocument.querySelector('div[feature-type="participants"] button') || [...ZoomDocument.querySelectorAll('div.more-button a[role="menuitem"]')].find(item => ['與會者', 'Participants'].includes(item.textContent));
+
+  if (toggleBtn) {
+    toggleBtn.click();
+  }
+
+  return !!ZoomDocument.querySelector(containerClass);
 }
-var jsxRuntime = { exports: {} };
+
+var jsxRuntime = {exports: {}};
+
 var reactJsxRuntime_production_min = {};
+
 /*
 object-assign
 (c) Sindre Sorhus
 @license MIT
 */
+/* eslint-disable no-unused-vars */
+
 var getOwnPropertySymbols = Object.getOwnPropertySymbols;
 var hasOwnProperty = Object.prototype.hasOwnProperty;
 var propIsEnumerable = Object.prototype.propertyIsEnumerable;
+
 function toObject(val) {
-  if (val === null || val === void 0) {
-    throw new TypeError("Object.assign cannot be called with null or undefined");
+  if (val === null || val === undefined) {
+    throw new TypeError('Object.assign cannot be called with null or undefined');
   }
+
   return Object(val);
 }
+
 function shouldUseNative() {
   try {
     if (!Object.assign) {
       return false;
-    }
-    var test1 = new String("abc");
-    test1[5] = "de";
-    if (Object.getOwnPropertyNames(test1)[0] === "5") {
+    } // Detect buggy property enumeration order in older V8 versions.
+    // https://bugs.chromium.org/p/v8/issues/detail?id=4118
+
+
+    var test1 = new String('abc'); // eslint-disable-line no-new-wrappers
+
+    test1[5] = 'de';
+
+    if (Object.getOwnPropertyNames(test1)[0] === '5') {
       return false;
-    }
+    } // https://bugs.chromium.org/p/v8/issues/detail?id=3056
+
+
     var test2 = {};
+
     for (var i = 0; i < 10; i++) {
-      test2["_" + String.fromCharCode(i)] = i;
+      test2['_' + String.fromCharCode(i)] = i;
     }
-    var order2 = Object.getOwnPropertyNames(test2).map(function(n2) {
-      return test2[n2];
+
+    var order2 = Object.getOwnPropertyNames(test2).map(function (n) {
+      return test2[n];
     });
-    if (order2.join("") !== "0123456789") {
+
+    if (order2.join('') !== '0123456789') {
       return false;
-    }
+    } // https://bugs.chromium.org/p/v8/issues/detail?id=3056
+
+
     var test3 = {};
-    "abcdefghijklmnopqrst".split("").forEach(function(letter) {
+    'abcdefghijklmnopqrst'.split('').forEach(function (letter) {
       test3[letter] = letter;
     });
-    if (Object.keys(Object.assign({}, test3)).join("") !== "abcdefghijklmnopqrst") {
+
+    if (Object.keys(Object.assign({}, test3)).join('') !== 'abcdefghijklmnopqrst') {
       return false;
     }
+
     return true;
   } catch (err) {
+    // We don't expect any of the above to throw, but better to be safe.
     return false;
   }
 }
-shouldUseNative() ? Object.assign : function(target, source) {
+
+shouldUseNative() ? Object.assign : function (target, source) {
   var from;
   var to = toObject(target);
   var symbols;
+
   for (var s = 1; s < arguments.length; s++) {
     from = Object(arguments[s]);
+
     for (var key in from) {
       if (hasOwnProperty.call(from, key)) {
         to[key] = from[key];
       }
     }
+
     if (getOwnPropertySymbols) {
       symbols = getOwnPropertySymbols(from);
+
       for (var i = 0; i < symbols.length; i++) {
         if (propIsEnumerable.call(from, symbols[i])) {
           to[symbols[i]] = from[symbols[i]];
@@ -118,8 +177,10 @@ shouldUseNative() ? Object.assign : function(target, source) {
       }
     }
   }
+
   return to;
 };
+
 /** @license React v17.0.2
  * react-jsx-runtime.production.min.js
  *
@@ -128,29 +189,41 @@ shouldUseNative() ? Object.assign : function(target, source) {
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-var f = React$1, g = 60103;
+
+
+
+var f = React$1,
+    g = 60103;
+
 reactJsxRuntime_production_min.Fragment = 60107;
-if (typeof Symbol === "function" && Symbol.for) {
+
+if ("function" === typeof Symbol && Symbol.for) {
   var h = Symbol.for;
   g = h("react.element");
   reactJsxRuntime_production_min.Fragment = h("react.fragment");
 }
-var m = f.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED.ReactCurrentOwner, n = Object.prototype.hasOwnProperty, p = {
-  key: true,
-  ref: true,
-  __self: true,
-  __source: true
+
+var m = f.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED.ReactCurrentOwner,
+    n = Object.prototype.hasOwnProperty,
+    p = {
+  key: !0,
+  ref: !0,
+  __self: !0,
+  __source: !0
 };
+
 function q(c, a, k) {
-  var b, d = {}, e = null, l = null;
-  k !== void 0 && (e = "" + k);
-  a.key !== void 0 && (e = "" + a.key);
-  a.ref !== void 0 && (l = a.ref);
-  for (b in a)
-    n.call(a, b) && !p.hasOwnProperty(b) && (d[b] = a[b]);
-  if (c && c.defaultProps)
-    for (b in a = c.defaultProps, a)
-      d[b] === void 0 && (d[b] = a[b]);
+  var b,
+      d = {},
+      e = null,
+      l = null;
+  void 0 !== k && (e = "" + k);
+  void 0 !== a.key && (e = "" + a.key);
+  void 0 !== a.ref && (l = a.ref);
+
+  for (b in a) n.call(a, b) && !p.hasOwnProperty(b) && (d[b] = a[b]);
+
+  if (c && c.defaultProps) for (b in a = c.defaultProps, a) void 0 === d[b] && (d[b] = a[b]);
   return {
     $$typeof: g,
     type: c,
@@ -160,13 +233,17 @@ function q(c, a, k) {
     _owner: m.current
   };
 }
+
 reactJsxRuntime_production_min.jsx = q;
 reactJsxRuntime_production_min.jsxs = q;
+
 {
   jsxRuntime.exports = reactJsxRuntime_production_min;
 }
+
 const jsx = jsxRuntime.exports.jsx;
 const jsxs = jsxRuntime.exports.jsxs;
+
 function EditModal({
   names,
   onSave,
@@ -221,6 +298,7 @@ function EditModal({
     })
   }), PluginBody);
 }
+
 function AllowList({
   onChange = (newList) => void 0
 }) {
@@ -252,6 +330,7 @@ function AllowList({
     })]
   });
 }
+
 function Logs({
   logs
 }) {
@@ -282,6 +361,7 @@ function Logs({
     })
   });
 }
+
 function App() {
   const [logs, setLogs] = React$1.useState([]);
   const addLog = React$1.useCallback((message, type) => setLogs((arr) => [...arr, {
@@ -289,6 +369,7 @@ function App() {
     message,
     type
   }]), [setLogs]);
+  const hasPartisapantListRef = React$1.useRef(null);
   const namesRef = React$1.useRef([]);
   const updateNames = React$1.useCallback((newList) => {
     namesRef.current = newList;
@@ -309,7 +390,13 @@ function App() {
     const timer = PluginWindow.setInterval(() => {
       if (!detectingRef.current)
         return;
-      ensureWaitroomWindow();
+      const hasList = ensureWaitroomWindow();
+      if (hasList !== hasPartisapantListRef.current) {
+        if (!hasList) {
+          addLog("\u8ACB\u958B\u555F\u8207\u6703\u8005\u8996\u7A97", "danger");
+        }
+        hasPartisapantListRef.current = hasList;
+      }
       const waitings = getWaitroomItems();
       for (const waiting of waitings) {
         const match = strictCompareRef.current ? namesRef.current.includes(waiting.name) : namesRef.current.some((name) => new RegExp(name).test(waiting.name));
@@ -322,7 +409,7 @@ function App() {
           unallowed.current.push(waiting.name);
         }
       }
-    }, 5e3);
+    }, 1e3);
     PluginWindow.onbeforeunload = () => PluginWindow.clearInterval(timer);
   }, []);
   return /* @__PURE__ */ jsxs("div", {
@@ -372,6 +459,7 @@ function App() {
     })]
   });
 }
+
 ReactDOM.render(/* @__PURE__ */ jsx(React.StrictMode, {
   children: /* @__PURE__ */ jsx(App, {})
 }), PluginRoot);

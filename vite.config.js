@@ -22,7 +22,7 @@ export default defineConfig({
 	// 	}),
 	// ],
 	build: {
-		target: 'es2015',
+		target: 'esnext',
 		lib: {
 			entry: path.resolve(__dirname, 'src/main.jsx'),
 			name: 'ZoomAuto',

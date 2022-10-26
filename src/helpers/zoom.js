@@ -35,11 +35,14 @@ function allowWaiting(element) {
 }
 
 export function ensureWaitroomWindow() {
-	let container = ZoomDocument.querySelector('.participants-section-container');
+	const containerClass = ".participants-section-container"
+	let container = ZoomDocument.querySelector(containerClass);
 	if (container) {
 		return true;
 	}
-	const toggleBtn = ZoomDocument.querySelector('.footer-button__participants-icon').parentElement.parentElement;
-	toggleBtn.click();
-	return !!ZoomDocument.querySelector('.participants-section-container');
+	const toggleBtn = ZoomDocument.querySelector('div[feature-type="participants"] button') || [...ZoomDocument.querySelectorAll('div.more-button a[role="menuitem"]')].find(item => ['與會者', 'Participants'].includes(item.textContent));
+	if (toggleBtn) {
+		toggleBtn.click();
+	}
+	return !!ZoomDocument.querySelector(containerClass);
 }
